@@ -1,0 +1,93 @@
+body{
+    background-color: #f8f9fa;
+    margin:0;
+}
+*{
+    font-family: 'Poppins', sans-serif;
+}
+body > h2 {
+    font-style: italic;
+    text-align: center;
+    letter-spacing: .1em;
+    background-color: white;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+    padding: .5em;
+    margin: 0;
+}
+i{
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.card{
+    background-color: #fdfdfd;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
+    margin: 2em;
+    padding:2em;
+    border-radius: 1em;
+}
+.card label{
+    font-weight: bold;
+    padding:.5em;
+}
+.card input, textarea{
+    font-family: monospace;
+    border-radius: .3em;
+    border: 1px solid rgba(var(--theme), 0.5);
+    padding: .3em;
+    border: 2;
+}
+.card h3{
+    color: rgb(var(--theme));
+    letter-spacing: .1em;
+    border-bottom:2px solid rgb(var(--theme));
+}
+.card .options, .card .list{
+    width:45%;
+    display:inline-flex;
+    flex-direction:column;
+}
+.card .list li{
+    cursor:grab;
+}
+.card code{
+    font-family: monospace;
+    background-color: rgba(var(--theme), 0.2)
+}
+.card button{
+    background-color: #e9ecef;
+    color: rgb(var(--theme));
+    border:none;
+    border-radius: 1em;
+    margin-top:1em;
+    padding:.5em;
+    font-weight:500;
+    cursor:pointer;
+    transition: background-color .2s;
+}
+.card button:hover{
+    background-color: rgba(var(--theme),0.2);
+}
+#configuration{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+#configuration textarea{
+    resize: vertical;
+}
+#codearea{
+    width: 100%;
+    height: 40em;
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+#codearea .card{
+    display:flex;
+    flex-direction: column;
+}
+#codearea textarea{
+    font-family: monospace;
+    width:100%;
+    flex-grow: 1;
+    resize: vertical;
+}

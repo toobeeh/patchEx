@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>patchEx</title>
+  <meta name="author" content="tobeh">
+  <meta name="description" content="Regex patcher">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+  </style>
+  <script src="https://kit.fontawesome.com/1d27418d86.js" crossorigin="anonymous"></script>
+  <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <h2>patchEx <small> <i class="fas fa-infinity"></i> RegEx code patcher</small></h2>
+  <div id="configuration">
+    <div class="card" style="--theme: 53, 53, 137">
+      <h3> <i class="fas fa-dna"></i> Inject Code</h3>
+      <div class="options">
+        <label for="injectCode">Injected code <small>(text)</small></label>
+        <textarea id="injectCode">
+
+          </textarea>
+        <label for="injectAtRegex">Inject before <small>(RegEx)</small></label></label>
+        <input type="text" id="injectAtRegex">
+        <button id="addInjection">Add Injection</button>
+      </div>
+      <ul class="list" id="injectionsView">
+
+      </ul>
+    </div>
+    <div class="card" style="--theme:137, 53, 111">
+      <h3><i class="fas fa-reply-all"></i> Replace Text</h3>
+      <div class="options">
+        <label for="replaceSource">Replace from <small>(RegEx)</small></label>
+        <input type="text" id="replaceSource">
+        <label for="replaceTarget">Replace to <small>(RegEx)</small></label>
+        <input type="text" id="replaceTarget">
+        <button id="addReplacement">Add Replacement</button>
+      </div>
+      <ul class="list" id="replacementsView">
+
+      </ul>
+    </div>
+  </div>
+  <div id="codearea">
+    <div class="card" style="--theme:137, 53, 53">
+      <h3><i class="fas fa-align-left"></i> Source Code</h3>
+      <textarea id="inputCode">
+      </textarea>
+    </div>
+    <div class="card" style="--theme:53, 137, 126">
+      
+      <h3><i class="fas fa-hat-wizard"></i> Patched Code </h3>
+      <button id="patchCode">Generate Code</button>
+      <br><br>
+      <textarea id="outputCode">
+  
+      </textarea>
+    </div>
+  </div>
+  <script src="js/script.js"></script>
+</body>
+
+</html>
