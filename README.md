@@ -6,3 +6,5 @@ This is designed to work in two fabulous ways:
 
 So, my workflow is basically adding my code to the source and replacing constants in my code with values from the source found by the regex.  
 https://htmlpreview.github.io/?https://github.com/toobeeh/patchEx/blob/master/index.html
+
+Saving & loading profiles: [shift] + [L] / [S]
