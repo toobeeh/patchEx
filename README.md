@@ -1,5 +1,5 @@
 # patchEx
-I desparately am in need of some tool makes that utterly boring sourcecode patching after a skribbl.io update instead of me.  
+I desparately am in need of some tool that makes that utterly boring sourcecode patching after a skribbl.io update instead of me.  
 This is deigned to work in two ways:
 - Inserting code after the first match group of a regex  
 - Replacing text in the code to some values that are found via regex match groups.
