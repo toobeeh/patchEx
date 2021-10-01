@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const saveElements = [elements.injectAtRegex,elements.injectCode,elements.replaceSource, elements.replaceTarget,elements.inputCode];
-    saveElements.forEach(input => input.value = localStorage[input.id]);
+    saveElements.forEach(input => input.value = localStorage[input.id] ? localStorage[input.id] : "");
     window.onbeforeunload = ()=>{
         saveElements.forEach(input=>{
             localStorage[input.id] = input.value;
