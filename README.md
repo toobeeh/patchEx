@@ -5,4 +5,6 @@ This is designed to work in two fabulous ways:
 - Replacing text in the code to some values that are found via regex match groups.
 
 So, my workflow is basically adding my code to the source and replacing constants in my code with values from the source found by the regex.  
-https://htmlpreview.github.io/?https://github.com/toobeeh/patchEx/blob/master/index.html
+https://raw.githack.com/toobeeh/patchEx/master/index.html
+
+Saving & loading profiles: [shift] + [L] / [S]
