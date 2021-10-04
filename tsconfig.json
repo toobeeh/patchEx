@@ -1,14 +1,14 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "esnext",
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
         "target": "esnext"
-
     },
     "files": [
-        "js/script.ts"
+        "js/script.ts",
+        "js/patchEx.ts",
     ]
 }

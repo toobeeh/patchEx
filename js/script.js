@@ -1,6 +1,5 @@
+import * as pX from "./patchEx.js";
 const elements = {
-    replacementsView: document.querySelector("#replacementsView"),
-    injectionsView: document.querySelector("#injectionsView"),
     addReplacement: document.querySelector("#addReplacement"),
     addInjection: document.querySelector("#addInjection"),
     replaceTarget: document.querySelector("#replaceTarget"),
@@ -10,184 +9,85 @@ const elements = {
     patchCode: document.querySelector("#patchCode"),
     inputCode: document.querySelector("#inputCode"),
     outputCode: document.querySelector("#outputCode"),
+    currentGroup: document.querySelector("#currentGroupView"),
+    groups: document.querySelector("#groupsView"),
+    addGroup: document.querySelector("#addGroup"),
+    deleteGroup: document.querySelector("#deleteGroup")
 };
-class PatchReplacement {
-    listItem;
-    sourceRegex;
-    targetRegex;
-    constructor(source, target) {
-        this.sourceRegex = new RegExp(source, "g");
-        this.targetRegex = new RegExp(target, "g");
-        this.listItem = document.createElement("li");
-        this.listItem.innerHTML = "Replace <code>" + source + "</code> to <code>" + target + "</code>";
-        elements.replacementsView.appendChild(this.listItem);
-    }
-}
-class PatchInjection {
-    listItem;
-    injectionCode;
-    injectionPositionRegex;
-    constructor(code, position) {
-        this.injectionCode = code.trim();
-        this.injectionPositionRegex = new RegExp(position, "g");
-        this.listItem = document.createElement("li");
-        this.listItem.innerHTML = "Before first group of <code>" + position + "</code> insert <code>" + code.substr(0, 100) + "</code>";
-        elements.injectionsView.appendChild(this.listItem);
-    }
-}
-class PatchInjectionResult {
-    matches;
-    recursionAbort;
-    injection;
-    constructor(injection, matches, recursionAbort) {
-        this.injection = injection;
-        this.recursionAbort = recursionAbort;
-        this.matches = matches;
-    }
-}
-class PatchReplacementResult {
-    matches;
-    recursionAbort;
-    replacement;
-    constructor(replacement, matches, recursionAbort) {
-        this.replacement = replacement;
-        this.recursionAbort = recursionAbort;
-        this.matches = matches;
-    }
-}
-class CodePatcherResult {
-    successfulInjections;
-    successfulReplacements;
-    failedInjections;
-    failedReplacements;
-    sourceCode;
-    patchedCode;
-    successrate;
-    constructor(successfulInjections, successfulReplacements, failedInjections, failedReplacements, sourceCode, patchedCode) {
-        this.successfulInjections = successfulInjections;
-        this.successfulReplacements = successfulReplacements;
-        this.failedInjections = failedInjections;
-        this.failedReplacements = failedReplacements;
-        this.sourceCode = sourceCode;
-        this.patchedCode = patchedCode;
-        this.successrate = (successfulReplacements.length + successfulInjections.length) + 100 / (successfulReplacements.length + successfulInjections.length + failedReplacements.length + failedReplacements.length);
-    }
-}
-class CodePatcher {
-    sourceCode;
-    debug;
-    injections;
-    replacements;
-    lastResult = null;
-    constructor(source, injections, replacements, debug = true) {
-        this.replacements = replacements;
-        this.injections = injections;
-        this.debug = debug;
-        this.sourceCode = source.trim();
-    }
-    process() {
-        let patch = this.sourceCode;
-        let successfulInjections = [];
-        let successfulReplacements = [];
-        let failedInjections = [];
-        let failedReplacements = [];
-        for (const injection of this.injections) {
-            let originalOccurences = [...this.sourceCode.matchAll(injection.injectionPositionRegex)].length;
-            let matches = new Array();
-            let recursionAbort = false;
-            let match;
-            while ((match = injection.injectionPositionRegex.exec(patch)) != null && !recursionAbort) {
-                matches.push({ original: match[0], result: "" });
-                let beforeInsert = patch.slice(0, match.index + match[1].length);
-                let afterInsert = patch.slice(match.index + match[1].length);
-                patch = beforeInsert + "\n" + injection.injectionCode + afterInsert;
-                if (matches.length > 10 * originalOccurences)
-                    recursionAbort = true;
-            }
-            const result = new PatchInjectionResult(injection, matches, recursionAbort);
-            if (matches.length > 0)
-                successfulInjections.push(result);
-            else
-                failedInjections.push(result);
-        }
-        for (const replacement of this.replacements) {
-            let matches = new Array();
-            let target = replacement.targetRegex.exec(patch);
-            if (target != null) {
-                patch = patch.replaceAll(replacement.sourceRegex, match => {
-                    matches.push({ original: match, result: target[1] });
-                    return target[1];
-                });
-            }
-            const result = new PatchReplacementResult(replacement, matches, false);
-            if (matches.length > 0)
-                successfulReplacements.push(result);
-            else
-                failedReplacements.push(result);
-        }
-        const result = new CodePatcherResult(successfulInjections, successfulReplacements, failedInjections, failedReplacements, this.sourceCode, patch);
-        return result;
-    }
-}
-let replacements = [];
-let injections = [];
+let processor = new pX.PatchProcessor(elements.groups, elements.currentGroup);
+let currentGroupDetails = -1;
 const loadProfile = (name) => {
     const profile = localStorage["savedProfile_" + name];
     if (profile != "") {
-        const settings = JSON.parse(profile);
-        settings.replacements?.forEach((repdata) => {
-            const replacement = new PatchReplacement(repdata.source, repdata.target);
-            console.log("Loaded replacement: ", replacement);
-            replacements.push(replacement);
-        });
-        settings.injections?.forEach((injdata) => {
-            const injection = new PatchInjection(injdata.code, injdata.position);
-            console.log("Loaded replacement: ", injection);
-            injections.push(injection);
-        });
+        const settings = processor.importConfig(profile);
     }
 };
 const saveProfile = (name) => {
-    const settings = {
-        replacements: replacements.map(rep => {
-            return { source: rep.sourceRegex.source, target: rep.targetRegex.source };
-        }),
-        injections: injections.map(inj => {
-            return { code: inj.injectionCode, position: inj.injectionPositionRegex.source };
-        })
-    };
+    const settings = processor.exportConfig();
     localStorage["savedProfile_" + name] = JSON.stringify(settings);
 };
+const addInjection = (position, code) => {
+    if (currentGroupDetails < 0)
+        alert("Add a group first!");
+    const inj = new pX.PatchInjection(code, position);
+    const addGroup = currentGroupDetails;
+    inj.onclick = () => {
+        processor.getGroup(addGroup).patcher.injections =
+            processor.getGroup(addGroup).patcher.injections.filter(added => added != inj);
+        processor.updateGroupDetails(addGroup);
+        processor.updateGroupView();
+        elements.injectAtRegex.value = position;
+        elements.injectCode.value = code;
+    };
+    processor.getGroup(currentGroupDetails).patcher.injections.push(inj);
+    processor.updateGroupDetails(currentGroupDetails);
+    processor.updateGroupView();
+    console.log("Added Injection: ", inj);
+};
+const addReplacement = (source, target) => {
+    if (currentGroupDetails < 0)
+        alert("Add a group first!");
+    const rep = new pX.PatchReplacement(source, target);
+    const addGroup = currentGroupDetails;
+    rep.onclick = () => {
+        processor.getGroup(addGroup).patcher.replacements =
+            processor.getGroup(addGroup).patcher.replacements.filter(added => added != rep);
+        processor.updateGroupDetails(addGroup);
+        processor.updateGroupView();
+        elements.replaceSource.value = source;
+        elements.replaceTarget.value = target;
+    };
+    processor.getGroup(currentGroupDetails).patcher.replacements.push(rep);
+    processor.updateGroupDetails(currentGroupDetails);
+    processor.updateGroupView();
+    console.log("Added Replacement: ", rep);
+};
 document.addEventListener("DOMContentLoaded", () => {
+    elements.addGroup.addEventListener("click", () => {
+        const name = prompt("Enter a group name:");
+        currentGroupDetails = processor.addGroup(new pX.CodePatcher([], []), name);
+        processor.selectGroup(currentGroupDetails);
+    });
+    elements.deleteGroup.addEventListener("click", () => {
+        const grp = processor.getGroup(currentGroupDetails);
+        const remove = confirm("This will delete the group '" + grp.name + "'");
+        if (remove) {
+            processor.removeGroup(grp.id);
+            processor.selectGroup(processor.patchGroups[0].id);
+        }
+    });
     elements.addReplacement.addEventListener("click", event => {
         const target = elements.replaceTarget.value;
         const source = elements.replaceSource.value;
-        const rep = new PatchReplacement(source, target);
-        rep.listItem.addEventListener("click", () => {
-            replacements = replacements.filter(item => item != rep);
-            rep.listItem.remove();
-            elements.replaceSource.value = rep.sourceRegex.source;
-            elements.replaceTarget.value = rep.targetRegex.source;
-        });
-        replacements.push(rep);
-        console.log("Added replacement: ", rep);
+        addReplacement(source, target);
     });
     elements.addInjection.addEventListener("click", event => {
         const code = elements.injectCode.value;
         const position = elements.injectAtRegex.value;
-        const inj = new PatchInjection(code, position);
-        inj.listItem.addEventListener("click", () => {
-            injections = injections.filter(item => item != inj);
-            inj.listItem.remove();
-            elements.injectAtRegex.value = inj.injectionPositionRegex.source;
-            elements.injectCode.value = inj.injectionCode;
-        });
-        injections.push(inj);
-        console.log("Added Injection: ", inj);
+        addInjection(position, code);
     });
     elements.patchCode.addEventListener("click", event => {
-        const patcher = new CodePatcher(elements.inputCode.value, injections, replacements);
-        const result = patcher.process();
+        const result = processor.process(elements.inputCode.value);
         console.log("Patch done: ", result);
         elements.outputCode.value = result.patchedCode;
     });
@@ -199,14 +99,29 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
     document.addEventListener("keydown", event => {
-        if (event.key == "S") {
+        if (event.key.toUpperCase() == "S" && event.altKey) {
             const profile = prompt("Saving profile - enter name: ");
             saveProfile(profile);
         }
-        else if (event.key == "L") {
+        else if (event.key.toUpperCase() == "L" && event.altKey) {
             const found = Object.keys(localStorage).filter(key => key.includes("savedProfile_")).join(", ").replaceAll("savedProfile_", "");
             const profile = prompt("Loading profile - enter name: \nFound Profiles:\n" + found);
             loadProfile(profile);
+        }
+        else if (event.key.toUpperCase() == "I" && event.altKey) {
+            const injection = JSON.parse(prompt("Adding injection - paste JSON:"));
+            addInjection(injection.position, injection.code);
+        }
+        else if (event.key.toUpperCase() == "R" && event.altKey) {
+            const replacement = JSON.parse(prompt("Adding replacement - paste JSON:"));
+            addReplacement(replacement.source, replacement.target);
+        }
+        else if (event.key.toUpperCase() == "C" && event.altKey) {
+            navigator.clipboard.writeText(processor.exportConfig());
+            alert("Copied JSON to clipboard.");
+        }
+        else if (event.key.toUpperCase() == "V" && event.altKey) {
+            processor.importConfig(prompt("Enter config JSON:"));
         }
     });
 });

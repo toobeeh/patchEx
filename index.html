@@ -18,7 +18,7 @@
 <body>
   <h2>patchEx <small> <i class="fas fa-infinity"></i> RegEx code patcher</small></h2>
   <div id="configuration">
-    <div class="card" style="--theme: 53, 53, 137">
+    <div id="cardInject" class="card" style="--theme: 53, 53, 137">
       <h3> <i class="fas fa-dna"></i> Inject Code</h3>
       <div class="options">
         <label for="injectCode">Injected code <small>(text)</small></label>
@@ -29,11 +29,11 @@
         <input type="text" id="injectAtRegex">
         <button id="addInjection">Add Injection</button>
       </div>
-      <ul class="list" id="injectionsView">
+      <!-- <ul class="list" id="injectionsView">
 
-      </ul>
+      </ul> -->
     </div>
-    <div class="card" style="--theme:137, 53, 111">
+    <div id="cardReplace" class="card" style="--theme: 53, 53, 137">
       <h3><i class="fas fa-reply-all"></i> Replace Text</h3>
       <div class="options">
         <label for="replaceSource">Replace from <small>(RegEx)</small></label>
@@ -42,13 +42,29 @@
         <input type="text" id="replaceTarget">
         <button id="addReplacement">Add Replacement</button>
       </div>
-      <ul class="list" id="replacementsView">
+      <!-- <ul class="list" id="replacementsView">
 
-      </ul>
+      </ul> -->
+    </div>
+    <div id="cardGroup" class="card" style="--theme:137, 53, 111">
+      <h3><i class="fas fa-th-list"></i> Group Details</h3>
+      <div class="list" id="currentGroupView">
+        Add or choose a group to start!
+      </div>
+      <div>
+        <button id="addGroup">Add Group</button>
+        <button id="deleteGroup">Delete Group</button>
+      </div>
+    </div>
+    <div id="cardProcess" class="card" style="--theme:137, 53, 111">
+      <h3><i class="fas fa-layer-group"></i> Patch Process</h3>
+      <ol class="list" id="groupsView">
+
+      </ol> 
     </div>
   </div>
   <div id="codearea">
-    <div class="card" style="--theme:137, 53, 53">
+    <div class="card" style="--theme:53, 137, 126">
       <h3><i class="fas fa-align-left"></i> Source Code</h3>
       <textarea id="inputCode">
       </textarea>
@@ -63,7 +79,7 @@
       </textarea>
     </div>
   </div>
-  <script src="js/script.js"></script>
+  <script src="js/script.js" type="module"></script>
 </body>
 
 </html>

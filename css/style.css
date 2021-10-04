@@ -21,8 +21,8 @@ i{
 .card{
     background-color: #fdfdfd;
     box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
-    margin: 2em;
-    padding:2em;
+    margin: 1.5em;
+    padding:1em;
     border-radius: 1em;
 }
 .card label{
@@ -42,7 +42,7 @@ i{
     border-bottom:2px solid rgb(var(--theme));
 }
 .card .options, .card .list{
-    width:45%;
+    width:100%;
     display:inline-flex;
     flex-direction:column;
 }
@@ -70,7 +70,7 @@ i{
 #configuration{
     width: 100%;
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 30% 30% 20% 20%;
 }
 #configuration textarea{
     resize: vertical;
@@ -90,4 +90,22 @@ i{
     width:100%;
     flex-grow: 1;
     resize: vertical;
+}
+
+#cardInject{
+    grid-column-start: 1;
+}
+#cardReplace{
+    grid-column-start: 1;
+}
+#cardGroup{
+    grid-column-start: 2;
+    grid-row-start: 1;
+    grid-row-end: span 2;
+}
+#cardProcess{
+    grid-row-start: 1;
+    grid-row-end: span 2;
+    grid-column-start: 3;
+    grid-column-end: span 2;
 }
