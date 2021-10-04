@@ -1,6 +1,32 @@
+/* 
+:root{
+    --color: black;
+    --card-background:#fdfdfd ;
+    --card-shadow: 0 0 0;
+    --body-background:#f8f9fa;
+    --header-background:white;
+    --button-background: #e9ecef;
+} */
+
+:root{
+    --color: white;
+    --card-background:#172231 ;
+    --card-shadow: 0 0 0;
+    --body-background: #111c27;
+    --header-background:#172231;
+    --button-background: #203147;
+}
+input, button, textarea{
+    background: var(--button-background);
+}
+textarea, input[type=text]{
+    border: none !important;
+    color: var(--color);
+}
 body{
-    background-color: #f8f9fa;
+    background-color: var(--body-background);
     margin:0;
+    color: var(--color);
 }
 *{
     font-family: 'Poppins', sans-serif;
@@ -9,7 +35,7 @@ body > h2 {
     font-style: italic;
     text-align: center;
     letter-spacing: .1em;
-    background-color: white;
+    background-color: var(--header-background);
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
     padding: .5em;
     margin: 0;
@@ -19,8 +45,8 @@ i{
     margin-right: 1em;
 }
 .card{
-    background-color: #fdfdfd;
-    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
+    background-color: var(--card-background);
+    box-shadow: 0 0.5rem 1rem rgb(var(--card-shadow) / 15%);
     margin: 1.5em;
     padding:1em;
     border-radius: 1em;
@@ -54,7 +80,7 @@ i{
     background-color: rgba(var(--theme), 0.2)
 }
 .card button{
-    background-color: #e9ecef;
+    background-color: var(--button-background);
     color: rgb(var(--theme));
     border:none;
     border-radius: 1em;

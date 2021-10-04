@@ -128,7 +128,6 @@ class CodePatcher{
             else {
                 failedReplacements.push(result);
                 console.log("Replace patch failed: ", result);
-                console.log("At source: ", patch);
             };
         }
 
@@ -149,12 +148,14 @@ class PatchProcessor{
     lastID: number;
     groupContainer: HTMLDivElement;
     groupDetailContainer: HTMLDivElement;
+    currentGroup: number;
 
     constructor(container: HTMLDivElement, detailContainer: HTMLDivElement){
         this.patchGroups = [];
         this.lastID = 0;
         this.groupContainer = container;
         this.groupDetailContainer = detailContainer;
+        this.currentGroup = -1;
     }
 
     importConfig(config: string){
@@ -256,8 +257,9 @@ class PatchProcessor{
     }
 
     selectGroup(id:number){
-        	this.groupDetailContainer.innerHTML = "";
-            this.groupDetailContainer.appendChild(this.getGroup(id).details);
+        this.groupDetailContainer.innerHTML = "";
+        this.groupDetailContainer.appendChild(this.getGroup(id).details);
+        this.currentGroup = id;
     }
 
     changeOrder(reordered: number[]){

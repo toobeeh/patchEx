@@ -120,7 +120,6 @@ class CodePatcher {
             else {
                 failedReplacements.push(result);
                 console.log("Replace patch failed: ", result);
-                console.log("At source: ", patch);
             }
             ;
         }
@@ -133,11 +132,13 @@ class PatchProcessor {
     lastID;
     groupContainer;
     groupDetailContainer;
+    currentGroup;
     constructor(container, detailContainer) {
         this.patchGroups = [];
         this.lastID = 0;
         this.groupContainer = container;
         this.groupDetailContainer = detailContainer;
+        this.currentGroup = -1;
     }
     importConfig(config) {
         let configObject;
@@ -194,6 +195,7 @@ class PatchProcessor {
     selectGroup(id) {
         this.groupDetailContainer.innerHTML = "";
         this.groupDetailContainer.appendChild(this.getGroup(id).details);
+        this.currentGroup = id;
     }
     changeOrder(reordered) {
         let reorderedGroups = [];

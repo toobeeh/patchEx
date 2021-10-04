@@ -15,7 +15,6 @@ const elements = {
     deleteGroup: document.querySelector("#deleteGroup")
 };
 let processor = new pX.PatchProcessor(elements.groups, elements.currentGroup);
-let currentGroupDetails = -1;
 const loadProfile = (name) => {
     const profile = localStorage["savedProfile_" + name];
     if (profile != "") {
@@ -24,13 +23,13 @@ const loadProfile = (name) => {
 };
 const saveProfile = (name) => {
     const settings = processor.exportConfig();
-    localStorage["savedProfile_" + name] = JSON.stringify(settings);
+    localStorage["savedProfile_" + name] = settings;
 };
 const addInjection = (position, code) => {
-    if (currentGroupDetails < 0)
+    if (processor.currentGroup < 0)
         alert("Add a group first!");
     const inj = new pX.PatchInjection(code, position);
-    const addGroup = currentGroupDetails;
+    const addGroup = processor.currentGroup;
     inj.onclick = () => {
         processor.getGroup(addGroup).patcher.injections =
             processor.getGroup(addGroup).patcher.injections.filter(added => added != inj);
@@ -39,16 +38,16 @@ const addInjection = (position, code) => {
         elements.injectAtRegex.value = position;
         elements.injectCode.value = code;
     };
-    processor.getGroup(currentGroupDetails).patcher.injections.push(inj);
-    processor.updateGroupDetails(currentGroupDetails);
+    processor.getGroup(processor.currentGroup).patcher.injections.push(inj);
+    processor.updateGroupDetails(processor.currentGroup);
     processor.updateGroupView();
     console.log("Added Injection: ", inj);
 };
 const addReplacement = (source, target) => {
-    if (currentGroupDetails < 0)
+    if (processor.currentGroup < 0)
         alert("Add a group first!");
     const rep = new pX.PatchReplacement(source, target);
-    const addGroup = currentGroupDetails;
+    const addGroup = processor.currentGroup;
     rep.onclick = () => {
         processor.getGroup(addGroup).patcher.replacements =
             processor.getGroup(addGroup).patcher.replacements.filter(added => added != rep);
@@ -57,19 +56,19 @@ const addReplacement = (source, target) => {
         elements.replaceSource.value = source;
         elements.replaceTarget.value = target;
     };
-    processor.getGroup(currentGroupDetails).patcher.replacements.push(rep);
-    processor.updateGroupDetails(currentGroupDetails);
+    processor.getGroup(processor.currentGroup).patcher.replacements.push(rep);
+    processor.updateGroupDetails(processor.currentGroup);
     processor.updateGroupView();
     console.log("Added Replacement: ", rep);
 };
 document.addEventListener("DOMContentLoaded", () => {
     elements.addGroup.addEventListener("click", () => {
         const name = prompt("Enter a group name:");
-        currentGroupDetails = processor.addGroup(new pX.CodePatcher([], []), name);
-        processor.selectGroup(currentGroupDetails);
+        let added = processor.addGroup(new pX.CodePatcher([], []), name);
+        processor.selectGroup(added);
     });
     elements.deleteGroup.addEventListener("click", () => {
-        const grp = processor.getGroup(currentGroupDetails);
+        const grp = processor.getGroup(processor.currentGroup);
         const remove = confirm("This will delete the group '" + grp.name + "'");
         if (remove) {
             processor.removeGroup(grp.id);
@@ -89,6 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.patchCode.addEventListener("click", event => {
         const result = processor.process(elements.inputCode.value);
         console.log("Patch done: ", result);
+        alert("Done! Stats:\n - Replacements failed: " + result.failedReplacements.length.toString()
+            + "\n - Injections failed: " + result.failedReplacements.length.toString());
         elements.outputCode.value = result.patchedCode;
     });
     const saveElements = [elements.injectAtRegex, elements.injectCode, elements.replaceSource, elements.replaceTarget, elements.inputCode];
