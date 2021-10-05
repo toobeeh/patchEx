@@ -10,3 +10,11 @@ Live at https://tobeh.host/patchEx
 For usage & shortcuts visit the website.
 For an example usage, load the skribblPatchConfig in ./js.  
 This patch will work with skribbl's 2021 update in any beautified version.
+
+## Known bugs:
+- Editing a imported injection / replacement does not work  
+- Repeatedly patching often errors. Reloading after a patch fixes this.  
+
+## Possible improvements:
+- Changing order of groups
+- Detailed success-output (successrate, marking a group & its patches as successful / failed) 
