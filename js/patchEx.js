@@ -28,7 +28,7 @@ class PatchInjection {
         this.injectionCode = code.trim();
         this.injectionPositionRegex = new RegExp(position, "g");
         this.listItem = document.createElement("li");
-        this.listItem.innerHTML = "Before first group of <code>" + position + "</code> insert <code>" + code.substr(0, 100) + "</code>";
+        this.listItem.innerHTML = "After first group of <code>" + position + "</code> insert <code>" + code.substr(0, 100) + "</code>";
         this.listItem.addEventListener("click", this.clickhandler);
     }
 }

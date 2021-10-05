@@ -1,5 +1,7 @@
 import * as pX from "./patchEx.js";
 const elements = {
+    toggleColors: document.querySelector("#rightBtn"),
+    toggleHelp: document.querySelector("#leftBtn"),
     addReplacement: document.querySelector("#addReplacement"),
     addInjection: document.querySelector("#addInjection"),
     replaceTarget: document.querySelector("#replaceTarget"),
@@ -91,6 +93,12 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Done! Stats:\n - Replacements failed: " + result.failedReplacements.length.toString()
             + "\n - Injections failed: " + result.failedReplacements.length.toString());
         elements.outputCode.value = result.patchedCode;
+    });
+    elements.toggleColors.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+    });
+    elements.toggleHelp.addEventListener("click", () => {
+        document.body.classList.toggle("help");
     });
     const saveElements = [elements.injectAtRegex, elements.injectCode, elements.replaceSource, elements.replaceTarget, elements.inputCode];
     saveElements.forEach(input => input.value = localStorage[input.id] ? localStorage[input.id] : "");

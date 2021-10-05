@@ -1,4 +1,4 @@
-/* 
+
 :root{
     --color: black;
     --card-background:#fdfdfd ;
@@ -6,9 +6,9 @@
     --body-background:#f8f9fa;
     --header-background:white;
     --button-background: #e9ecef;
-} */
+} 
 
-:root{
+body.dark{
     --color: white;
     --card-background:#172231 ;
     --card-shadow: 0 0 0;
@@ -124,14 +124,29 @@ i{
 #cardReplace{
     grid-column-start: 1;
 }
-#cardGroup{
+#cardGroup, #cardHelp{
     grid-column-start: 2;
     grid-row-start: 1;
     grid-row-end: span 2;
 }
-#cardProcess{
+#cardGroup{
+    display:flex;
+    flex-direction: column;
+    place-content: space-between;
+}
+body.help #cardGroup, body.help #cardProcess{display:none;}
+body:not(.help) #cardHelp, body:not(.help) #cardAbout{display:none;}
+#cardProcess, #cardAbout{
     grid-row-start: 1;
     grid-row-end: span 2;
     grid-column-start: 3;
     grid-column-end: span 2;
+}
+
+#leftBtn, #rightBtn{cursor: pointer;}
+#leftBtn{
+    float:left;
+}
+#rightBtn{
+    float:right;
 }
