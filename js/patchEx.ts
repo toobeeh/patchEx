@@ -132,11 +132,11 @@ class CodePatcher{
         }
 
         const result = new CodePatcherResult(
-            successfulInjections, 
-            successfulReplacements, 
-            failedInjections, 
-            failedReplacements, 
-            sourceCode, 
+            successfulInjections,
+            successfulReplacements,
+            failedInjections,
+            failedReplacements,
+            sourceCode,
             patch
         );
         return result;
@@ -161,11 +161,11 @@ class PatchProcessor{
     importConfig(config: string){
         let configObject: {
             groups: Array<{
-                name:string, 
+                name:string,
                 replacements: Array<{
-                    source:string, 
+                    source:string,
                     target:string
-                }>, 
+                }>,
                 injections: Array<{
                     position: string,
                     code:string
@@ -192,11 +192,11 @@ class PatchProcessor{
     exportConfig(){
         let configObject: {
             groups: Array<{
-                name:string, 
+                name:string,
                 replacements: Array<{
-                    source:string, 
+                    source:string,
                     target:string
-                }>, 
+                }>,
                 injections: Array<{
                     position: string,
                     code:string
@@ -306,9 +306,9 @@ class PatchProcessor{
 }
 
 export{
-    PatchReplacement, 
-    PatchInjection, 
-    PatchReplacementResult, 
+    PatchReplacement,
+    PatchInjection,
+    PatchReplacementResult,
     PatchInjectionResult,
     CodePatcher,
     CodePatcherResult,
